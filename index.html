@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MeiMei, Will You Be My Valentine? 🍓💌</title>
+
+<!-- Script Font -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin:0; padding:0;
+  font-family:'Dancing Script', cursive;
+  background: url('images/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  overflow:hidden;
+  height:100vh;
+  display:flex; justify-content:center; align-items:center;
+}
+
+/* Floating YES!!! */
+.yes-bg {
+  position:fixed; top:0; left:0;
+  width:100%; height:100%; z-index:0;
+  pointer-events:none; overflow:hidden;
+}
+.yes-text {
+  position:absolute;
+  color:#ff1a75;
+  font-weight:bold;
+  font-size:24px;
+  text-shadow:0 0 5px #fff;
+  animation: floatYes linear infinite;
+}
+@keyframes floatYes {
+  0% { transform: translate(0,100vh) rotate(0deg); opacity:1; }
+  50% {opacity:1;}
+  100% { transform: translate(0,-50px) rotate(360deg); opacity:0; }
+}
+
+/* Floating photos */
+.photo-bg {
+  position:fixed; width:100%; height:100%;
+  top:0; left:0; z-index:0;
+  pointer-events:auto; display:none;
+}
+.bg-photo {
+  position:absolute; width:120px;
+  border-radius:20px; cursor:pointer;
+  transition: transform 0.4s ease, top 0.4s ease, left 0.4s ease, z-index 0.4s ease;
+}
+.bg-photo.active {
+  transform: scale(1.8) !important;
+  top:50% !important; left:80% !important;
+  z-index:15 !important;
+}
+
+/* Main content */
+.container {
+  max-width:800px; width:95%;
+  color:white; z-index:2;
+  text-align:center; perspective:800px;
+}
+h1 {
+  font-size:30px; color:#ff1a75;
+  text-shadow:0 0 10px #fff;
+}
+button {
+  margin:10px; padding:14px 28px;
+  font-size:18px; border:none;
+  border-radius:30px; cursor:pointer;
+  font-weight:bold; background:white;
+  color:#ff1a75; transition:0.3s;
+}
+button:hover { transform:scale(1.1); }
+.hidden { display:none; }
+
+/* Video */
+#loveyouVideo {
+  display:none;
+  width:360px;
+  border-radius:15px;
+  margin: 10px;px auto;
+}
+#unmuteBtn {
+  display:none;
+  margin-top: 10px;
+  font-size:18px;
+}
+
+/* Bigger envelope */
+.letter-envelope {
+  width:500px; height:350px;
+  position:relative; margin:auto;
+}
+.envelope-body {
+  width:100%; height:100%;
+  background-image: url('images/strawberry.jpg');
+  background-size:cover; background-position:center;
+  border-radius:15px; border:3px solid #ff4d4d;
+  box-shadow:0 10px 25px rgba(0,0,0,0.25);
+  display:flex; align-items:center; justify-content:center;
+  position:absolute; top:0; left:0; z-index:1;
+}
+.envelope-flap {
+  width:100%; height:60%;
+  position:absolute; top:0; left:0;
+  transform-origin:top; transform:rotateX(0deg);
+  transition:transform 1s ease; z-index:2;
+  clip-path:polygon(0 0, 100% 0, 50% 100%);
+  background-image: url('images/straw.png');
+  background-size:cover; background-position:center;
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Letter inside */
+.letter-content {
+  padding:25px;
+  background:rgba(255,247,247,0.9);
+  color:#ff1a75; font-size:18px;
+  border-radius:12px; opacity:0;
+  transition:opacity 1s ease 0.5s;
+  text-align:left; width:90%; height:85%;
+  overflow-y:auto;
+}
+.letter-envelope.open .envelope-flap {
+  transform:rotateX(-180deg);
+}
+.letter-envelope.open .letter-content {
+  opacity:1;
+}
+
+@media(max-width:480px) {
+  .container {flex-direction:column;}
+  .letter-envelope {width:90%; height:300px;}
+  .letter-content {font-size:16px;}
+  #loveyouVideo { width:80%; }
+}
+</style>
+</head>
+<body>
+
+<!-- Floating YES!!! -->
+<div class="yes-bg" id="yesBg"></div>
+
+<!-- Floating Photos -->
+<div class="photo-bg" id="photos">
+  <img src="images/us1.jpg" class="bg-photo">
+  <img src="images/us2.jpg" class="bg-photo">
+  <img src="images/us3.jpg" class="bg-photo">
+  <img src="images/us4.jpg" class="bg-photo">
+  <img src="images/us5.jpg" class="bg-photo">
+  <img src="images/us6.jpg" class="bg-photo">
+  <img src="images/us7.jpg" class="bg-photo">
+  <img src="images/us8.jpg" class="bg-photo">
+  <img src="images/us9.jpg" class="bg-photo">
+  <img src="images/us10.jpg" class="bg-photo">
+  <img src="images/us11.jpg" class="bg-photo">
+  <img src="images/us12.jpg" class="bg-photo">
+  <img src="images/us13.jpg" class="bg-photo">
+  <img src="images/us14.jpg" class="bg-photo">
+  <img src="images/us15.jpg" class="bg-photo">
+  <img src="images/us16.jpg" class="bg-photo">
+  <img src="images/us17.jpg" class="bg-photo">
+</div>
+
+<div class="container">
+  <div id="question">
+    <h1>MeiMei ❤️<br>Will you be my Valentine?</h1>
+    <button onclick="showLetter()">YES</button>
+    <button onclick="showLetter()">YES</button>
+  </div>
+
+  <!-- Video -->
+  <video id="loveyouVideo" loop playsinline>
+    <source src="images/loveyou.mp4" type="video/mp4">
+    Your browser doesn’t support the video tag.
+  </video>
+
+  <button id="unmuteBtn">🔊 Enable Sound</button>
+
+  <div id="letter" class="hidden">
+    <div class="letter-envelope" id="envelope">
+      <div class="envelope-flap"></div>
+      <div class="envelope-body">
+        <div class="letter-content">
+          My dearest MeiMei,<br><br>
+          You are the sweetest part of my life, brighter than any strawberry or flower.
+          I never imagined that someone could understand me, laugh with me, and stand by
+          my side through every twist and turn — but you did. We’ve been through so much
+          together, the ups and the downs, the quiet moments and the loud ones, and yet
+          here we are — still laughing, still loving, still choosing each other every day.<br><br>
+
+          You’ve seen my best and my worst, and you still stay. You make ordinary days
+          feel magical, and even when life feels heavy, your smile makes everything
+          lighter. You’re my encouragement, my calm, my heartbeat, my home.<br><br>
+
+          I promise to walk with you through every tomorrow, to celebrate your joys and
+          lift you in your struggles, to listen with my heart and speak with kindness,
+          to love you deeply and truly — not just today, but for all the days we have.<br><br>
+
+          So here I am, MeiMei — asking you again in a thousand different ways…
+          Be my Valentine. Be my forever. Be my always. 💖🍓
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// show letter + photos + video
+function showLetter(){
+  document.getElementById("question").classList.add("hidden");
+  document.getElementById("letter").classList.remove("hidden");
+  document.getElementById("photos").style.display="block";
+
+  const vid = document.getElementById("loveyouVideo");
+  vid.style.display = "block";
+  vid.muted = true;
+  vid.autoplay = true;
+  vid.play().catch(err => console.log("Muted autoplay:", err));
+
+  document.getElementById("unmuteBtn").style.display = "block";
+}
+
+// unmute sound
+document.getElementById("unmuteBtn").addEventListener("click", ()=> {
+  const vid = document.getElementById("loveyouVideo");
+  vid.muted = false;
+  vid.play();
+});
+
+// Floating YES!!!
+function createYes() {
+  const yesBg = document.getElementById('yesBg');
+  for(let i=0;i<20;i++){
+    const span = document.createElement('div');
+    span.className='yes-text';
+    span.innerText='YES!!!';
+    span.style.left=Math.random()*90+'%';
+    span.style.animationDuration=(3+Math.random()*3)+'s';
+    span.style.animationDelay=(Math.random()*5)+'s';
+    yesBg.appendChild(span);
+  }
+}
+createYes();
+
+// floating photos unchanged…
+const photos = document.querySelectorAll('.bg-photo');
+photos.forEach(photo=>{
+  let left=Math.random()*90, top=window.innerHeight+Math.random()*300;
+  let speed=0.5+Math.random()*1.5;
+  photo.style.left=left+'%'; photo.style.top=top+'px';
+  function floatUp(){
+    top-=speed; photo.style.top=top+'px';
+    if(top < -150){
+      top=window.innerHeight + Math.random()*300;
+      left=Math.random()*90; photo.style.left=left+'%';
+    }
+    requestAnimationFrame(floatUp);
+  }
+  setTimeout(()=>{requestAnimationFrame(floatUp);}, Math.random()*5000);
+});
+
+// photo enlarge toggle
+photos.forEach(photo=>{
+  photo.addEventListener('click',(e)=>{
+    e.stopPropagation();
+    const isActive = photo.classList.contains('active');
+    photos.forEach(p=>p.classList.remove('active'));
+    if(!isActive) photo.classList.add('active');
+  });
+});
+
+// open envelope
+document.getElementById('envelope')?.addEventListener('click', ()=>{
+  document.getElementById('envelope').classList.add('open');
+});
+</script>
+
+</body>
+</html>
